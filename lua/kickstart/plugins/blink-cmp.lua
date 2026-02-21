@@ -57,7 +57,8 @@ return {
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        -- preset = 'default',
+        preset = 'enter',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -73,6 +74,21 @@ return {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
+      },
+
+      cmdline = {
+        keymap = { preset = 'inherit' }, -- or 'inherit' if you prefer your normal mappings
+        completion = {
+          menu = {
+            auto_show = true,
+            auto_show_delay_ms = 0, -- show immediately (i.e., after first typed char)
+          },
+          list = {
+            selection = {
+              preselect = false, -- <- key: don't auto-select an entry
+            },
+          },
+        },
       },
 
       sources = {

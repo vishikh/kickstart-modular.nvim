@@ -71,4 +71,55 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- shortcut to enable/disable word wrap in all open windows
+vim.keymap.set('n', '<leader>w', function()
+  vim.cmd 'windo set wrap!'
+end, { desc = 'Toggle wrap in all windows' })
+
+-- scrollbind toggle for two split windows (toggle in current and other window)
+vim.keymap.set('n', '<leader>sb', function()
+  vim.cmd 'set scb!'
+  vim.cmd 'wincmd w'
+  vim.cmd 'set scb!'
+  vim.cmd 'wincmd w'
+end, { desc = 'Toggle [S]croll[b]ind in both splits' })
+
+-- For diff mode: enable wrap when diff is turned on
+vim.api.nvim_create_augroup('DiffWrap', { clear = true })
+vim.api.nvim_create_autocmd('OptionSet', {
+  group = 'DiffWrap',
+  pattern = 'diff',
+  callback = function()
+    if vim.wo.diff then
+      vim.wo.wrap = true
+    end
+  end,
+})
+
+-- Ignore whitespace in diff mode (uncomment if you want it)
+-- vim.opt.diffopt:append('iwhite')
+
+-- Vertical diffsplit (Kickstart often uses <leader>d; use <leader>dv instead)
+vim.keymap.set('n', '<leader>dv', ':vert diffsplit ', { desc = 'Vertical diffsplit', silent = false })
+
+-- Run current Python file (save all, then run)
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
+  callback = function()
+    vim.keymap.set('n', '<leader>r', function()
+      vim.cmd 'wa'
+      vim.cmd '!python %'
+    end, { buffer = true, desc = 'Run current Python file' })
+  end,
+})
+
+-- Expand current buffer path in command-line: typing %% in :cmd expands to %:h/
+-- (Works like your cnoremap <expr> ...)
+vim.keymap.set('c', '%%', function()
+  if vim.fn.getcmdtype() == ':' then
+    return vim.fn.expand '%:h' .. '/'
+  end
+  return '%%'
+end, { expr = true, desc = 'Expand to current file dir in cmdline' })
+
 -- vim: ts=2 sts=2 sw=2 et
