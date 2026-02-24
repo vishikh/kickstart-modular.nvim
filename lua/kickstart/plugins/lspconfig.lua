@@ -211,25 +211,9 @@ return {
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {
-        --   settings = {
-        --     pyright = {
-        --       -- Using Ruff's import organizer
-        --       disableOrganizeImports = true,
-        --     },
-        --     python = {
-        --       analysis = {
-        --         -- Ignore all files for analysis to exclusively use Ruff for linting
-        --         ignore = { '*' },
-        --       },
-        --     },
-        --   },
-        -- },
-        --
-        basedpyright = {
-          cmd = { 'basedpyright-langserver', '--stdio' }, -- uses PATH
+        pyright = {
           settings = {
-            basedpyright = {
+            pyright = {
               -- Using Ruff's import organizer
               disableOrganizeImports = true,
             },
@@ -241,6 +225,7 @@ return {
             },
           },
         },
+
         ruff = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -281,9 +266,10 @@ return {
       --
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
-      local ensure_installed = vim.tbl_keys(servers or {})
+      local ensure_installed = vim.tbl_keys {}
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'lua_ls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
