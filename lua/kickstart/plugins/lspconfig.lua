@@ -211,9 +211,25 @@ return {
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {
+        -- pyright = {
+        --   settings = {
+        --     pyright = {
+        --       -- Using Ruff's import organizer
+        --       disableOrganizeImports = true,
+        --     },
+        --     python = {
+        --       analysis = {
+        --         -- Ignore all files for analysis to exclusively use Ruff for linting
+        --         ignore = { '*' },
+        --       },
+        --     },
+        --   },
+        -- },
+        --
+        basedpyright = {
+          cmd = { 'basedpyright-langserver', '--stdio' }, -- uses PATH
           settings = {
-            pyright = {
+            basedpyright = {
               -- Using Ruff's import organizer
               disableOrganizeImports = true,
             },

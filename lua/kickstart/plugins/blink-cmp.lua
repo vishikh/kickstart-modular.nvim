@@ -21,14 +21,25 @@ return {
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
+        config = function(_, opts)
+          require('luasnip').config.setup(opts or {})
+
+          -- Load your custom Lua snippets from lua/custom/snippets/
+          require('luasnip.loaders.from_lua').lazy_load {
+            paths = vim.fn.stdpath 'config' .. '/lua/custom/snippets',
+          }
+
+          -- Optional: also enable the standardized doc snippets you mentioned
+          require('luasnip').filetype_extend('python', { 'pydoc' })
+        end,
       },
       'folke/lazydev.nvim',
     },
@@ -77,7 +88,23 @@ return {
       },
 
       cmdline = {
-        keymap = { preset = 'inherit' }, -- or 'inherit' if you prefer your normal mappings
+        keymap = {
+          preset = 'none',
+
+          -- Keep Neovim history navigation
+          ['<Up>'] = { 'fallback' },
+          ['<Down>'] = { 'fallback' },
+
+          -- Use these for completion list
+          ['<Tab>'] = { 'select_next', 'fallback' },
+          ['<S-Tab>'] = { 'select_prev', 'fallback' },
+          ['<C-n>'] = { 'select_next', 'fallback' },
+          ['<C-p>'] = { 'select_prev', 'fallback' },
+
+          -- Optional: accept completion + run command
+          ['<CR>'] = { 'select_accept_and_enter', 'fallback' },
+        },
+
         completion = {
           menu = {
             auto_show = true,
@@ -92,7 +119,7 @@ return {
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
